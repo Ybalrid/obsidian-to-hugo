@@ -35,7 +35,7 @@ class WikiLinksProcessorTestCase(unittest.TestCase):
         self.assertEqual(hugo_link, '[baz]({{< ref "bar" >}})')
 
     def test_convert_wiki_link_with_text_and_backslash(self):
-        wiki_link = wiki_links_processor.get_wiki_links("[[bar\|baz]]")[0]
+        wiki_link = wiki_links_processor.get_wiki_links("[[bar\\|baz]]")[0]
         hugo_link = wiki_links_processor.wiki_link_to_hugo_link(wiki_link)
         self.assertEqual(hugo_link, '[baz]({{< ref "bar" >}})')
 
@@ -53,7 +53,7 @@ class WikiLinksProcessorTestCase(unittest.TestCase):
         real_in = """
         [[foo]]
         [[bar|baz]]
-        [[bar\|baz]]
+        [[bar\\|baz]]
         [[bar/_index|baz]]
         [[bar#Foo Bar|baz]]
         """

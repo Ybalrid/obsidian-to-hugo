@@ -24,8 +24,8 @@ def get_wiki_links(text: str) -> List[WikiLink]:
             "wiki_link": match.group(),
         }
 
-        if "\|" in match.group(1):
-            out["link"], out["text"] = match.group(1).split("\|")
+        if "\\|" in match.group(1):
+            out["link"], out["text"] = match.group(1).split("\\|")
         elif "|" in match.group(1):
             out["link"], out["text"] = match.group(1).split("|")
         else:
