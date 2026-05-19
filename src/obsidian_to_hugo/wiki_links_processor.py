@@ -56,8 +56,17 @@ def wiki_link_to_hugo_link(wiki_link: WikiLink) -> str:
 
     # Process image links too
     if wiki_link["wiki_link"].startswith("!"):
-        # check if the wiki_link has text in a lambda and assign it to caption:
-        caption_tag = f'caption="{wiki_link["text"]}"' if ("text" in wiki_link and wiki_link['text'] != link_combined )  else ""
+        if (
+            "/" not in link_combined
+            and not link_combined.startswith(("../", "./", "/"))
+            and "#" not in link_combined
+        ):
+            link_combined = f"../{link_combined}"
+        caption_tag = (
+            f'caption="{wiki_link["text"]}"'
+            if ("text" in wiki_link and wiki_link["text"] != wiki_link["link"])
+            else ""
+        )
         hugo_link = f'{{{{< figure src="{link_combined}" {caption_tag} >}}}}'
     else:
         hugo_link = f'[{wiki_link["text"]}]({{{{< ref "{link_combined}" >}}}})'

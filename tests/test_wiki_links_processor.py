@@ -67,6 +67,24 @@ class WikiLinksProcessorTestCase(unittest.TestCase):
         real_out = wiki_links_processor.replace_wiki_links(real_in)
         self.assertEqual(real_out, expected_out)
 
+    def test_convert_image_wiki_link_uses_parent_relative_path_for_root_images(self):
+        wiki_link = wiki_links_processor.get_wiki_links("![[ektachrome original.jpg]]")[0]
+        hugo_link = wiki_links_processor.wiki_link_to_hugo_link(wiki_link)
+        self.assertEqual(hugo_link, '{{< figure src="../ektachrome original.jpg"  >}}')
+
+    def test_convert_image_wiki_link_keeps_nested_paths(self):
+        wiki_link = wiki_links_processor.get_wiki_links("![[images/ektachrome original.jpg]]")[0]
+        hugo_link = wiki_links_processor.wiki_link_to_hugo_link(wiki_link)
+        self.assertEqual(hugo_link, '{{< figure src="images/ektachrome original.jpg"  >}}')
+
+    def test_convert_image_wiki_link_with_caption(self):
+        wiki_link = wiki_links_processor.get_wiki_links("![[ektachrome original.jpg|Original]]")[0]
+        hugo_link = wiki_links_processor.wiki_link_to_hugo_link(wiki_link)
+        self.assertEqual(
+            hugo_link,
+            '{{< figure src="../ektachrome original.jpg" caption="Original" >}}',
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
